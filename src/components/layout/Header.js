@@ -1,4 +1,5 @@
 import Button from 'components/button'
+import { useAuth } from 'contexts/auth-context'
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import styled from 'styled-components'
@@ -45,6 +46,7 @@ const HeaderStyled = styled.div`
     display: flex;
     align-items: center;
     position: relative;
+    margin-right: 20px;
   }
   .search-input {
     flex: 1;
@@ -57,12 +59,17 @@ const HeaderStyled = styled.div`
     transform: translateY(-50%);
     right: 25px;
   }
-  .header-button {
-    margin-left: 20px;
-  }
 `
 
+function getLastName(name) {
+  if (!name) return ''
+  const length = name.split(' ').length
+  return name.split(' ')[length - 1]
+}
+
 function Header(props) {
+  const { userInfo } = useAuth()
+
   return (
     <HeaderStyled>
       <div className="container">
@@ -115,9 +122,16 @@ function Header(props) {
             </span>
           </div>
 
-          <Button type="button" height="56px" className="header-button">
-            Sign up
-          </Button>
+          {!userInfo ? (
+            <Button to="/sign-in" type="button" height="56px" className="header-button">
+              Sign up
+            </Button>
+          ) : (
+            <div className="user-auth">
+              <span>Welcome back, </span>
+              <strong className="text-primary">{getLastName(userInfo?.displayName)}</strong>
+            </div>
+          )}
         </div>
       </div>
     </HeaderStyled>
