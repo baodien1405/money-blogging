@@ -106,10 +106,12 @@ function SignUpPage() {
 
         <Button
           type="submit"
+          kind="primary"
           disabled={isSubmitting}
           loading={isSubmitting}
           style={{
-            maxWidth: 300,
+            width: '100%',
+            maxWidth: '300px',
             margin: '0 auto'
           }}
         >

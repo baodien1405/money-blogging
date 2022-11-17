@@ -21,7 +21,7 @@ const menuLinks = [
 
 const HeaderStyled = styled.div`
   .header-main {
-    padding: 45px;
+    padding: 45px 0;
     display: flex;
     align-items: center;
   }

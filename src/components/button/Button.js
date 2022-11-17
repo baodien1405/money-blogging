@@ -1,13 +1,13 @@
 import LoadingSpinner from 'components/loading'
 import React from 'react'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 import PropTypes from 'prop-types'
 import { NavLink } from 'react-router-dom'
 
 const ButtonStyled = styled.button`
   padding: 0 25px;
   border-radius: 8px;
-  color: white;
+
   font-size: 18px;
   font-weight: 600;
   line-height: 1;
@@ -16,24 +16,43 @@ const ButtonStyled = styled.button`
   justify-content: center;
   align-items: center;
   cursor: pointer;
-  background-image: linear-gradient(
-    to right bottom,
-    ${(props) => props.theme.primary},
-    ${(props) => props.theme.secondary}
-  );
+  ${(props) =>
+    props.kind === 'secondary' &&
+    css`
+      background-color: white;
+      color: ${(props) => props.theme.primary};
+    `};
+  ${(props) =>
+    props.kind === 'primary' &&
+    css`
+      color: white;
+      background-image: linear-gradient(
+        to right bottom,
+        ${(props) => props.theme.primary},
+        ${(props) => props.theme.secondary}
+      );
+    `};
   &:disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 `
 
-function Button({ type = 'button', to, onClick = () => {}, children, loading, ...props }) {
+function Button({
+  type = 'button',
+  kind = 'primary',
+  to,
+  onClick = () => {},
+  children,
+  loading,
+  ...props
+}) {
   const child = !!loading ? <LoadingSpinner /> : children
 
   if (to !== '' && typeof to === 'string') {
     return (
-      <NavLink to={to}>
-        <ButtonStyled type={type} {...props}>
+      <NavLink to={to} style={{ display: 'inline-block' }}>
+        <ButtonStyled type={type} kind={kind} {...props}>
           {child}
         </ButtonStyled>
       </NavLink>
@@ -41,18 +60,19 @@ function Button({ type = 'button', to, onClick = () => {}, children, loading, ..
   }
 
   return (
-    <ButtonStyled type={type} onClick={onClick} {...props}>
+    <ButtonStyled type={type} kind={kind} onClick={onClick} {...props}>
       {child}
     </ButtonStyled>
   )
 }
 
 Button.propTypes = {
-  type: PropTypes.oneOf(['button', 'submit']).isRequired,
+  type: PropTypes.oneOf(['button', 'submit']),
   isLoading: PropTypes.bool,
   onClick: PropTypes.func,
   children: PropTypes.node,
-  to: PropTypes.string
+  to: PropTypes.string,
+  kind: PropTypes.oneOf(['primary', 'secondary'])
 }
 
 export default Button
