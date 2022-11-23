@@ -1,18 +1,18 @@
 import { yupResolver } from '@hookform/resolvers/yup'
-import { useAuth } from 'contexts/auth-context'
-import React, { useEffect, useState } from 'react'
-import { useForm } from 'react-hook-form'
-import { NavLink, useNavigate } from 'react-router-dom'
-import AuthenticationPage from './AuthenticationPage'
-import * as yup from 'yup'
-import Field from 'components/field'
-import Label from 'components/label'
-import Input from 'components/input'
-import { IconEyeClose, IconEyeOpen } from 'components/icon'
 import Button from 'components/button'
-import { toast } from 'react-toastify'
+import Field from 'components/field'
+import Input from 'components/input'
+import InputPassword from 'components/input/InputPassword'
+import Label from 'components/label'
+import { useAuth } from 'contexts/auth-context'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { auth } from 'firebaseApp/firebase-config'
+import { useEffect } from 'react'
+import { useForm } from 'react-hook-form'
+import { NavLink, useNavigate } from 'react-router-dom'
+import { toast } from 'react-toastify'
+import * as yup from 'yup'
+import AuthenticationPage from './AuthenticationPage'
 
 const schema = yup.object({
   email: yup
@@ -25,7 +25,6 @@ const schema = yup.object({
 function SignInPage() {
   const { userInfo } = useAuth()
   const navigate = useNavigate()
-  const [togglePassword, setTogglePassword] = useState(false)
   const {
     control,
     formState: { isSubmitting, errors },
@@ -70,18 +69,7 @@ function SignInPage() {
 
         <Field>
           <Label htmlFor="password">Password</Label>
-          <Input
-            name="password"
-            type={togglePassword ? 'text' : 'password'}
-            placeholder="Please enter your password"
-            control={control}
-          >
-            {!togglePassword ? (
-              <IconEyeClose className="input-icon" onClick={() => setTogglePassword(true)} />
-            ) : (
-              <IconEyeOpen className="input-icon" onClick={() => setTogglePassword(false)} />
-            )}
-          </Input>
+          <InputPassword control={control} />
         </Field>
 
         <div className="have-account">
